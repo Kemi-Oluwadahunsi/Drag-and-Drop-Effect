@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Gelion Medium";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Gelion Medium"), url("/fonts/Gelion Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Gelion Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Gelion Regular"), url("/fonts/Gelion Regular.woff") format("woff");
+}
+
+.dragging {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: grabbing;
+}
