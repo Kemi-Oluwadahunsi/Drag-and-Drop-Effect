@@ -39,6 +39,7 @@ const Card = ({
         <h2 className="font-primary text-[#292B36] font-medium text-base sm:text-[1.2rem] lg:text-[1.3rem] xl:text-[1.5rem]">
           {title}
         </h2>
+        
         <div className="flex gap-2 items-center">
             <div>
               <Image
