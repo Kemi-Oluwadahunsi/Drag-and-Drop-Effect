@@ -15,18 +15,16 @@ export default function Home() {
       if (dragImage) {
         const touch = e.touches[0];
         dragImage.style.top = `${touch.pageY - 25}px`;
-        dragImage.style.left = `${touch.pageX - 15}px`;
+        dragImage.style.left = `${touch.pageX - 50}px`;
         e.preventDefault();
       }
     };
 
     document.addEventListener("touchmove", handleTouchMove, { passive: false });
-    
     return () => {
       document.removeEventListener("touchmove", handleTouchMove);
     };
   }, [dragImage]);
-
 
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
@@ -55,15 +53,6 @@ export default function Home() {
     const moveDragImage = (event) => {
       dragImage.style.top = `${event.pageY - 25}px`;
       dragImage.style.left = `${event.pageX - 50}px`;
-
-      // const screenWidth = window.innerWidth;
-      // if (screenWidth <= 769) {
-      //   dragImage.style.top = `${event.pageY - 25}px`;
-      //   dragImage.style.left = `${event.pageX - 25}px`;
-      // } else {
-      //   dragImage.style.top = `${event.pageY - 25}px`;
-      //   dragImage.style.left = `${event.pageX - 50}px`;
-      // }
     };
 
     document.addEventListener("dragover", moveDragImage);
@@ -101,16 +90,13 @@ export default function Home() {
       <img src="${image}" alt="${title}" class="w-8 h-8 rounded-sm" />
       <h2 class="text-[0.9rem] font-bold ml-2">${title}</h2>
     `;
-    // document.body.appendChild(dragImage);
-    // setDragImage(dragImage);
-
     document.body.appendChild(dragImage);
-    e.dataTransfer.setDragImage(dragImage, 50, 25);
     setDragImage(dragImage);
 
     const touch = e.touches[0];
     dragImage.style.top = `${touch.pageY - 25}px`;
-    dragImage.style.left = `${touch.pageX - 25}px`;
+    dragImage.style.left = `${touch.pageX - 50}px`;
+    e.preventDefault();
   };
 
   const handleDragEnd = () => {
@@ -122,18 +108,16 @@ export default function Home() {
     setDragOverCardId(null);
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e, id) => {
     if (dragImage) {
       dragImage.remove();
       setDragImage(null);
     }
-    setDraggingCardId(null);
-    setDragOverCardId(null);
+    handleDrop(e, id);
   };
 
   const handleDragOver = (e, id) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
     if (id === draggingCardId) return;
     setDragOverCardId(id);
   };
@@ -154,6 +138,22 @@ export default function Home() {
     setCards(newCards);
     handleDragEnd();
   };
+
+  const handleTouchMove = (e) => {
+    if (dragImage) {
+      const touch = e.touches[0];
+      dragImage.style.top = `${touch.pageY - 25}px`;
+      dragImage.style.left = `${touch.pageX - 50}px`;
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [dragImage]);
 
   
 
