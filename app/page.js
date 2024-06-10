@@ -91,11 +91,12 @@ export default function Home() {
       <h2 class="text-[0.9rem] font-bold ml-2">${title}</h2>
     `;
     document.body.appendChild(dragImage);
+    e.dataTransfer.setDragImage(dragImage, 50, 25);
     setDragImage(dragImage);
 
     const touch = e.touches[0];
     dragImage.style.top = `${touch.pageY - 25}px`;
-    dragImage.style.left = `${touch.pageX - 50}px`;
+    dragImage.style.left = `${touch.pageX - 15}px`;
     e.preventDefault();
   };
 
