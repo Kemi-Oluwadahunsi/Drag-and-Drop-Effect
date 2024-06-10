@@ -11,6 +11,8 @@ const Card = ({
   handleDragOver,
   handleDrop,
   handleDragEnd,
+  handleTouchStart,
+  handleTouchEnd,
   isDragging,
   isDraggedOver,
 }) => {
@@ -25,6 +27,8 @@ const Card = ({
       onDragOver={(e) => handleDragOver(e, id)}
       onDrop={handleDrop}
       onDragEnd={handleDragEnd}
+      onTouchStart={(e) => handleTouchStart(e, id, title, image)}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="">
         <Image
@@ -42,16 +46,16 @@ const Card = ({
         </h2>
 
         <div className="flex gap-2 items-center">
-            <div>
-              <Image
-            src={`/images/location.png`}
-            alt={title}
-            className="w-[100%] h-6 sm:w-[100%] sm:h-8 lg:w-[100%] lg:h-8"
-            width={20}
-            height={20}
-          />  
-            </div>
-          
+          <div>
+            <Image
+              src={`/images/location.png`}
+              alt={title}
+              className="w-[100%] h-6 sm:w-[100%] sm:h-8 lg:w-[100%] lg:h-8"
+              width={20}
+              height={20}
+            />
+          </div>
+
           <p className="text-[#A8A9AE] font-secondary text-lg pt-2">
             {subLocation}
           </p>

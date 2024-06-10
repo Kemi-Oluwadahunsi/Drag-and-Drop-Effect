@@ -10,6 +10,21 @@ export default function Home() {
   const [dragImage, setDragImage] = useState(null);
   const [dragOverCardId, setDragOverCardId] = useState(null);
 
+  useEffect(() => {
+    const handleTouchMove = (e) => {
+      if (dragImage) {
+        const touch = e.touches[0];
+        dragImage.style.top = `${touch.pageY - 25}px`;
+        dragImage.style.left = `${touch.pageX - 50}px`;
+      }
+    };
+
+    document.addEventListener("touchmove", handleTouchMove);
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [dragImage]);
+
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
     const dragImage = document.createElement("div");
@@ -35,14 +50,18 @@ export default function Home() {
     setDragImage(dragImage);
 
     const moveDragImage = (event) => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth <= 769) {
-        dragImage.style.top = `${event.pageY - 25}px`;
-        dragImage.style.left = `${event.pageX - 25}px`;
-      } else {
+      const moveDragImage = (event) => {
         dragImage.style.top = `${event.pageY - 25}px`;
         dragImage.style.left = `${event.pageX - 50}px`;
-      }
+      };
+      // const screenWidth = window.innerWidth;
+      // if (screenWidth <= 769) {
+      //   dragImage.style.top = `${event.pageY - 25}px`;
+      //   dragImage.style.left = `${event.pageX - 25}px`;
+      // } else {
+      //   dragImage.style.top = `${event.pageY - 25}px`;
+      //   dragImage.style.left = `${event.pageX - 50}px`;
+      // }
     };
 
     document.addEventListener("dragover", moveDragImage);
@@ -60,7 +79,45 @@ export default function Home() {
     );
   };
 
+  const handleTouchStart = (e, id, title, image) => {
+    setDraggingCardId(id);
+    const dragImage = document.createElement("div");
+    dragImage.id = "drag-image";
+    dragImage.style.position = "absolute";
+    dragImage.style.width = "250px";
+    dragImage.style.height = "80px";
+    dragImage.style.display = "flex";
+    dragImage.style.alignItems = "center";
+    dragImage.style.justifyContent = "start";
+    dragImage.style.backgroundColor = "white";
+    dragImage.style.border = "1px solid rgba(0,0,0,0.1)";
+    dragImage.style.borderRadius = "8px";
+    dragImage.style.paddingLeft = "8px";
+    dragImage.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
+    dragImage.style.pointerEvents = "none";
+    dragImage.innerHTML = `
+      <img src="${image}" alt="${title}" class="w-8 h-8 rounded-sm" />
+      <h2 class="text-[0.9rem] font-bold ml-2">${title}</h2>
+    `;
+    document.body.appendChild(dragImage);
+    setDragImage(dragImage);
+
+    const touch = e.touches[0];
+    dragImage.style.top = `${touch.pageY - 25}px`;
+    dragImage.style.left = `${touch.pageX - 25}px`;
+  };
+
+
   const handleDragEnd = () => {
+    if (dragImage) {
+      dragImage.remove();
+      setDragImage(null);
+    }
+    setDraggingCardId(null);
+    setDragOverCardId(null);
+  };
+
+  const handleTouchEnd = () => {
     if (dragImage) {
       dragImage.remove();
       setDragImage(null);
@@ -111,6 +168,8 @@ export default function Home() {
             handleDragEnd={handleDragEnd}
             handleDragOver={handleDragOver}
             handleDrop={(e) => handleDrop(e, card.id)}
+            handleTouchStart={handleTouchStart}
+            handleTouchEnd={handleTouchEnd}
             isDragging={draggingCardId === card.id}
             isDraggedOver={dragOverCardId === card.id}
           />
