@@ -10,20 +10,21 @@ export default function Home() {
   const [dragImage, setDragImage] = useState(null);
   const [dragOverCardId, setDragOverCardId] = useState(null);
 
-  useEffect(() => {
-    const handleTouchMove = (e) => {
-      if (dragImage) {
-        const touch = e.touches[0];
-        dragImage.style.top = `${touch.pageY - 25}px`;
-        dragImage.style.left = `${touch.pageX - 50}px`;
-      }
-    };
+ useEffect(() => {
+   const handleTouchMove = (e) => {
+     if (dragImage) {
+       const touch = e.touches[0];
+       dragImage.style.top = `${touch.pageY - 25}px`;
+       dragImage.style.left = `${touch.pageX - 50}px`;
+       e.preventDefault();
+     }
+   };
 
-    document.addEventListener("touchmove", handleTouchMove);
-    return () => {
-      document.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [dragImage]);
+   document.addEventListener("touchmove", handleTouchMove, { passive: false });
+   return () => {
+     document.removeEventListener("touchmove", handleTouchMove);
+   };
+ }, [dragImage]);
 
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
@@ -149,6 +150,22 @@ export default function Home() {
     setCards(newCards);
     handleDragEnd();
   };
+
+  const handleTouchMove = (e) => {
+    if (dragImage) {
+      const touch = e.touches[0];
+      dragImage.style.top = `${touch.pageY - 25}px`;
+      dragImage.style.left = `${touch.pageX - 50}px`;
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [dragImage]);
 
   return (
     <div className="container mx-auto py-4 w-[90%] sm:w-[60%] lg:w-[50%] xl:w-[45%] bg-white my-4">
