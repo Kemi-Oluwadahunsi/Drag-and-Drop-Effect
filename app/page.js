@@ -108,13 +108,22 @@ export default function Home() {
     setDragOverCardId(null);
   };
 
-  const handleTouchEnd = (e, id) => {
-    if (dragImage) {
-      dragImage.remove();
-      setDragImage(null);
-    }
-    handleDrop(e, id);
-  };
+   const handleTouchEnd = (e, id) => {
+     if (dragImage) {
+       dragImage.remove();
+       setDragImage(null);
+     }
+     setDraggingCardId(null);
+     setDragOverCardId(null);
+   };
+
+  // const handleTouchEnd = (e, id) => {
+  //   if (dragImage) {
+  //     dragImage.remove();
+  //     setDragImage(null);
+  //   }
+  //   handleDrop(e, id);
+  // };
 
   const handleDragOver = (e, id) => {
     e.preventDefault();
@@ -143,7 +152,7 @@ export default function Home() {
     if (dragImage) {
       const touch = e.touches[0];
       dragImage.style.top = `${touch.pageY - 25}px`;
-      dragImage.style.left = `${touch.pageX - 50}px`;
+      dragImage.style.left = `${touch.pageX - 15}px`;
       e.preventDefault();
     }
   };

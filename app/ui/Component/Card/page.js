@@ -19,7 +19,7 @@ const Card = ({
   return (
     <div
       id={`card-${id}`}
-      className={`card items-center p-4 pl-0 sm:pl-6 lg:pl-8 flex gap-4 lg:gap-8  cursor-pointer ${
+      className={`card items-center p-4 pl-0 sm:pl-6 lg:pl-8 flex gap-4 lg:gap-8 cursor-pointer ${
         isDragging ? " bg-[#F4F5F6]" : "bg-white"
       } ${isDraggedOver ? "border-b-2 border-[#1E9BF0]" : ""}`}
       draggable
