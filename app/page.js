@@ -1,7 +1,7 @@
 "use client";
 import Head from "next/head";
 import Card from "./ui/Component/Card/page";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import data from "./ui/data";
 
 export default function Home() {
@@ -10,24 +10,38 @@ export default function Home() {
   const [dragImage, setDragImage] = useState(null);
   const [dragOverCardId, setDragOverCardId] = useState(null);
 
-  // useEffect(() => {
-  //   const handleTouchMove = (e) => {
-  //     if (dragImage) {
-  //       const touch = e.touches[0];
-  //       dragImage.style.top = `${touch.pageY - 25}px`;
-  //       dragImage.style.left = `${touch.pageX - 15}px`;
-  //       e.preventDefault();
-  //     }
-  //   };
+  useEffect(() => {
+    const handleTouchMove = (e) => {
+      if (dragImage) {
+        const touch = e.touches[0];
+        dragImage.style.top = `${touch.pageY - 25}px`;
+        dragImage.style.left = `${touch.pageX - 15}px`;
+        e.preventDefault();
+      }
+    };
 
-  //   document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [dragImage]);
 
-  //   return () => {
-  //     document.removeEventListener("touchmove", handleTouchMove);
-  //   };
-  // }, [dragImage]);
 
-  
+  //   e.target.addEventListener(
+  //     "dragend",
+  //     () => {
+  //       document.removeEventListener("dragover", moveDragImage);
+  //       if (dragImage) {
+  //         dragImage.remove();
+  //         setDragImage(null);
+  //       }
+  //     },
+  //     { once: true }
+  //   );
+  // };
+
+
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
     const dragImage = document.createElement("div");
@@ -108,30 +122,9 @@ export default function Home() {
     e.dataTransfer.setDragImage(dragImage, 50, 25);
     setDragImage(dragImage);
 
-    const handleTouchMove = (e) => {
-      dragImage.style.top = `${touch.pageY - 25}px`;
-      dragImage.style.left = `${touch.pageX - 15}px`;
-      e.preventDefault();
-    };
-
-    document.addEventListener("touchmove", handleTouchMove, { passive: false });
-
-    e.target.addEventListener(
-      "touchend",
-      () => {
-        document.removeEventListener("touchmove", handleTouchMove);
-        if (dragImage) {
-          dragImage.remove();
-          setDragImage(null);
-        }
-      },
-      { once: true }
-    );
-
-
-    const touch = e.touches[0];
-    dragImage.style.top = `${touch.pageY - 25}px`;
-    dragImage.style.left = `${touch.pageX - 25}px`;
+    // const touch = e.touches[0];
+    // dragImage.style.top = `${touch.pageY - 25}px`;
+    // dragImage.style.left = `${touch.pageX - 25}px`;
   };
 
   const handleDragEnd = () => {
@@ -175,6 +168,8 @@ export default function Home() {
     setCards(newCards);
     handleDragEnd();
   };
+
+  
 
   return (
     <div className="container mx-auto py-4 w-[90%] sm:w-[60%] lg:w-[50%] xl:w-[45%] bg-white my-4">
