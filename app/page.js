@@ -1,7 +1,7 @@
 "use client";
 import Head from "next/head";
 import Card from "./ui/Component/Card/page";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import data from "./ui/data";
 
 export default function Home() {
