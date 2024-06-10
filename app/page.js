@@ -146,6 +146,7 @@ export default function Home() {
 
     setCards(newCards);
     handleDragEnd();
+    handleTouchEnd()
   };
 
   const handleTouchMove = (e) => {
