@@ -28,20 +28,6 @@ export default function Home() {
   }, [dragImage]);
 
 
-  //   e.target.addEventListener(
-  //     "dragend",
-  //     () => {
-  //       document.removeEventListener("dragover", moveDragImage);
-  //       if (dragImage) {
-  //         dragImage.remove();
-  //         setDragImage(null);
-  //       }
-  //     },
-  //     { once: true }
-  //   );
-  // };
-
-
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
     const dragImage = document.createElement("div");
@@ -122,9 +108,9 @@ export default function Home() {
     e.dataTransfer.setDragImage(dragImage, 50, 25);
     setDragImage(dragImage);
 
-    // const touch = e.touches[0];
-    // dragImage.style.top = `${touch.pageY - 25}px`;
-    // dragImage.style.left = `${touch.pageX - 25}px`;
+    const touch = e.touches[0];
+    dragImage.style.top = `${touch.pageY - 25}px`;
+    dragImage.style.left = `${touch.pageX - 25}px`;
   };
 
   const handleDragEnd = () => {
