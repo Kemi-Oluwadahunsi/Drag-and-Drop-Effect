@@ -200,6 +200,7 @@
 
 // page.js
 "use client";
+
 import Head from "next/head";
 import Card from "./ui/Component/Card/page";
 import { useState } from "react";
@@ -207,37 +208,29 @@ import data from "./ui/data";
 
 export default function Home() {
   const [cards, setCards] = useState(data);
-  const [draggingCardId, setDraggingCardId] = useState(null);
-  const [dragOverCardId, setDragOverCardId] = useState(null);
+  const [draggingCard, setDraggingCard] = useState(null);
+  const [dragOverCard, setDragOverCard] = useState(null);
 
-  const handleDragStart = (e, id, title, image) => {
-    setDraggingCardId(id);
-    e.dataTransfer.setData("text/plain", id);
-    e.dataTransfer.dropEffect = "move";
+  const handleDragStart = (e, card) => {
+    setDraggingCard(card);
   };
 
-  const handleDragOver = (e, id) => {
+  const handleDragOver = (e, card) => {
     e.preventDefault();
-    if (id === draggingCardId) return;
-    setDragOverCardId(id);
+    setDragOverCard(card);
   };
 
-  const handleDrop = (e, id) => {
+  const handleDrop = (e, targetCard) => {
     e.preventDefault();
-    if (id === draggingCardId) return;
+    if (!draggingCard || draggingCard.id === targetCard.id) return;
 
-    const newCards = [...cards];
-    const draggedIndex = newCards.findIndex(
-      (card) => card.id === draggingCardId
-    );
-    const targetIndex = newCards.findIndex((card) => card.id === id);
-
-    const [draggedCard] = newCards.splice(draggedIndex, 1);
-    newCards.splice(targetIndex, 0, draggedCard);
-
+    const newCards = cards.filter((c) => c.id !== draggingCard.id);
+    const targetIndex = newCards.findIndex((c) => c.id === targetCard.id);
+    newCards.splice(targetIndex, 0, draggingCard);
     setCards(newCards);
-    setDragOverCardId(null);
-    setDraggingCardId(null);
+
+    setDraggingCard(null);
+    setDragOverCard(null);
   };
 
   return (
@@ -247,21 +240,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="space-y-4">
-        {cards.map((card) => (
+        {cards.map((card, index) => (
           <Card
             key={card.id}
-            id={card.id}
-            title={card.title}
-            image={card.image}
-            subLocation={card.subLocation}
+            card={card}
+            isDragging={draggingCard && draggingCard.id === card.id}
+            isDraggedOver={dragOverCard && dragOverCard.id === card.id}
             handleDragStart={handleDragStart}
             handleDragOver={handleDragOver}
             handleDrop={handleDrop}
-            isDragging={draggingCardId === card.id}
-            isDraggedOver={dragOverCardId === card.id}
           />
         ))}
       </div>
     </div>
   );
 }
+

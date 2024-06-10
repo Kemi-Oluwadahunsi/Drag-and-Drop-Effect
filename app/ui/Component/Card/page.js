@@ -71,61 +71,62 @@
 
 "use client";
 import Image from "next/image";
+// card.js
 import React from "react";
 
 const Card = ({
-  id,
-  title,
-  image,
-  subLocation,
+  card,
+  isDragging,
+  isDraggedOver,
   handleDragStart,
   handleDragOver,
   handleDrop,
-  isDragging,
-  isDraggedOver,
 }) => {
   return (
     <div
-      id={`card-${id}`}
-      className={`card items-center p-4 pl-0 sm:pl-6 lg:pl-8 flex gap-4 lg:gap-8  cursor-pointer ${
-        isDragging ? " bg-[#F4F5F6]" : "bg-white"
-      } ${isDraggedOver ? "border-b-2 border-[#1E9BF0]" : ""}`}
+      className={`card flex items-center p-4 cursor-pointer ${
+        isDraggedOver ? "bg-gray-200" : ""
+      }`}
       draggable
-      onDragStart={(e) => handleDragStart(e, id, title, image)}
-      onDragOver={(e) => handleDragOver(e, id)}
-      onDrop={(e) => handleDrop(e, id)}
+      onDragStart={(e) => handleDragStart(e, card)}
+      onDragOver={(e) => handleDragOver(e, card)}
+      onDrop={(e) => handleDrop(e, card)}
     >
-     <div className="">
-         <Image
-          src={image}
-          alt={title}
-          className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
-          width={100}
-          height={100}
+      <div className="w-16 h-16 mr-2">
+        <Image
+          src={card.image}
+          alt={card.title}
+          className="w-full h-full object-cover rounded"
         />
       </div>
 
       <div className="flex flex-col">
-        <h2 className="font-primary text-[#292B36] font-medium text-base sm:text-[1.2rem] lg:text-[1.3rem] xl:text-[1.5rem]">
-          {title}
-        </h2>
+        <h2 className="text-lg font-medium">{card.title}</h2>
+        <p className="text-sm text-gray-500">{card.subLocation}</p>
+      </div>
 
-        <div className="flex gap-2 items-center">
-          <div>
+      {isDragging && (
+        <div
+          className="card-clone absolute border border-gray-300 bg-white rounded shadow-md"
+          style={{
+            top: `${event.clientY}px`,
+            left: `${event.clientX}px`,
+          }}
+        >
+          <div className="w-12 h-12">
             <Image
-              src={`/images/location.png`}
-              alt={title}
-              className="w-[100%] h-6 sm:w-[100%] sm:h-8 lg:w-[100%] lg:h-8"
-              width={20}
-              height={20}
+              src={card.image}
+              alt={card.title}
+              className="w-full h-full object-cover rounded"
             />
           </div>
 
-          <p className="text-[#A8A9AE] font-secondary text-lg pt-2">
-            {subLocation}
-          </p>
+          <div className="flex flex-col">
+            <h2 className="text-sm font-medium">{card.title}</h2>
+            {/* No need to display subLocation in clone */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
