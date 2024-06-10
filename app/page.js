@@ -10,21 +10,21 @@ export default function Home() {
   const [dragImage, setDragImage] = useState(null);
   const [dragOverCardId, setDragOverCardId] = useState(null);
 
- useEffect(() => {
-   const handleTouchMove = (e) => {
-     if (dragImage) {
-       const touch = e.touches[0];
-       dragImage.style.top = `${touch.pageY - 25}px`;
-       dragImage.style.left = `${touch.pageX - 50}px`;
-       e.preventDefault();
-     }
-   };
+  useEffect(() => {
+    const handleTouchMove = (e) => {
+      if (dragImage) {
+        const touch = e.touches[0];
+        dragImage.style.top = `${touch.pageY - 25}px`;
+        dragImage.style.left = `${touch.pageX - 50}px`;
+        e.preventDefault();
+      }
+    };
 
-   document.addEventListener("touchmove", handleTouchMove, { passive: false });
-   return () => {
-     document.removeEventListener("touchmove", handleTouchMove);
-   };
- }, [dragImage]);
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [dragImage]);
 
   const handleDragStart = (e, id, title, image) => {
     setDraggingCardId(id);
@@ -51,10 +51,9 @@ export default function Home() {
     setDragImage(dragImage);
 
     const moveDragImage = (event) => {
-      const moveDragImage = (event) => {
-        dragImage.style.top = `${event.pageY - 25}px`;
-        dragImage.style.left = `${event.pageX - 50}px`;
-      };
+      dragImage.style.top = `${event.pageY - 25}px`;
+      dragImage.style.left = `${event.pageX - 50}px`;
+
       // const screenWidth = window.innerWidth;
       // if (screenWidth <= 769) {
       //   dragImage.style.top = `${event.pageY - 25}px`;
@@ -107,7 +106,6 @@ export default function Home() {
     dragImage.style.top = `${touch.pageY - 25}px`;
     dragImage.style.left = `${touch.pageX - 25}px`;
   };
-
 
   const handleDragEnd = () => {
     if (dragImage) {
@@ -186,7 +184,7 @@ export default function Home() {
             handleDragOver={handleDragOver}
             handleDrop={(e) => handleDrop(e, card.id)}
             handleTouchStart={handleTouchStart}
-            handleTouchEnd={handleTouchEnd}
+            handleTouchEnd={(e) => handleTouchEnd(e, card.id)}
             isDragging={draggingCardId === card.id}
             isDraggedOver={dragOverCardId === card.id}
           />
